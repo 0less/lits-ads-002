@@ -13,14 +13,16 @@ fs.writeFileSync("hamstr.out", count, 'utf8');
 
 
 function checkHamsters (hamsters, hamstersCount) {
-  var foodArray = getFoodArray(hamsters, hamstersCount);
-  var sortedFoodArray = mergeSort(foodArray);
-  var hamstersEatSum = getFoodSum(sortedFoodArray, hamstersCount);
+  for (var i = hamstersCount; i >= 0; i--) {
+    var foodArray = getFoodArray(hamsters, i);
+    var sortedFoodArray = mergeSort(foodArray);
+    var hamstersEatSum = getFoodSum(sortedFoodArray, i);
 
-  if (hamstersEatSum > food) {
-    return checkHamsters(hamsters, --hamstersCount);
-  }
-  return hamstersCount;
+    if (hamstersEatSum <= food) {
+      return i;
+    }
+  };
+  return 0;
 }
 
 function getFoodArray (hamsters, hamstersCount) {

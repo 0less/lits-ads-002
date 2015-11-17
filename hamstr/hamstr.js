@@ -1,38 +1,48 @@
 var fs = require("fs");
 var inputRows = fs.readFileSync('hamstr.in').toString().split(/\r?\n/);
-var food = inputRows[0];
-var hamstersCount = inputRows[1];
-var hamsters = [];
-var count = 0;
+var food = +inputRows[0];
+var hamstersCount = +inputRows[1];
 
+var hamsters = [];
 for (var i=0; i<hamstersCount; i++) {
   hamsters[i] = inputRows[i+2].split(' ');
 }
-count = checkHamsters(hamsters, hamstersCount);
+
+var count = searchSuitableCount(hamsters, hamstersCount);
 fs.writeFileSync("hamstr.out", count, 'utf8');
 
+function searchSuitableCount(hamsters, hamstersCount) {
+  var start = 0;
+  var end = hamstersCount;
+  var middle;
 
-function checkHamsters (hamsters, hamstersCount) {
-  for (var i = hamstersCount; i >= 0; i--) {
-    var foodArray = getFoodArray(hamsters, i);
-    var sortedFoodArray = mergeSort(foodArray);
-    var hamstersEatSum = getFoodSum(sortedFoodArray, i);
+  while (start < end) {
+    middle = Math.floor((start + end + 1) / 2);
 
-    if (hamstersEatSum <= food) {
-      return i;
+    if (checkHamsters(hamsters, middle)) {
+      end = middle - 1;
+    } else {
+      start = middle;
     }
-  };
-  return 0;
+  }
+  return end;
 }
 
-function getFoodArray (hamsters, hamstersCount) {
+function checkHamsters (hamsters, hamstersCount) {
+  var sortedFoodArray = getSortedFoodArray(hamsters, hamstersCount);
+  var hamstersEatSum = getFoodSum(sortedFoodArray, hamstersCount);
+
+  return hamstersEatSum > food;
+}
+
+function getSortedFoodArray (hamsters, hamstersCount) {
   var hamstersEat = [];
   var hamstersLength = hamsters.length;
 
   for (var i=0; i<hamstersLength; i++) {
     hamstersEat[i] = +hamsters[i][0] + hamsters[i][1] * (hamstersCount-1);
-  };
-  return hamstersEat;
+  }
+  return mergeSort(hamstersEat);
 }
 
 function getFoodSum (sortedFoodArray, hamstersCount) {
@@ -40,7 +50,7 @@ function getFoodSum (sortedFoodArray, hamstersCount) {
 
   for (var i=0; i<hamstersCount; i++) {
     sum += sortedFoodArray[i];
-  };
+  }
   return sum;
 }
 

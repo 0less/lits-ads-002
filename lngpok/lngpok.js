@@ -5,7 +5,7 @@ var cards = inputRows[0].split(' ').map(function(item) {
 });
 
 var longestCardsLine = findLongestCardsLine(cards);
-/*fs.writeFileSync("lngpok.out", longestCardsLine, 'utf8');*/
+fs.writeFileSync("lngpok.out", longestCardsLine, 'utf8');
 
 function findLongestCardsLine(cards) {
   var sortedCards = mergeSort(cards);

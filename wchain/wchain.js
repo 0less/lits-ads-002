@@ -26,9 +26,8 @@
       for (var j=0, stringsLen=strMatrix[i].length; j<stringsLen; j++) {
         cutStrings = getCutStrings(strMatrix[i][j]);
 
-        sameStrings = cutStrings.filter(function(n) {
-          return strMatrix[i-1] ? strMatrix[i-1].indexOf(n) != -1 : false;
-        });
+        sameStrings = [];
+        if (strMatrix[i-1]) sameStrings = intersection(strMatrix[i-1], cutStrings);
 
         if (sameStrings.length) {
           biggerLength = 0;
@@ -45,6 +44,16 @@
     }, -Infinity);
 
     return max;
+  }
+
+  function intersection(x, y) {
+    var result = [];
+    for (var i = 0; i < x.length; i++) {
+      if (y.indexOf(x[i]) != -1) {
+        result.push(x[i]);
+      }
+    }
+    return result;
   }
 
   function getCutStrings(string) {
